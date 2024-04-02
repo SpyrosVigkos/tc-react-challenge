@@ -1,27 +1,35 @@
-import React, { Component } from 'react';
-import DiscoverBlock from './DiscoverBlock/components/DiscoverBlock';
-import '../styles/_discover.scss';
+import React from "react";
+import DiscoverBlock from "./DiscoverBlock/components/DiscoverBlock";
+import "../styles/_discover.scss";
+import useSpotifyData from "../../../hooks/useSpotifyData";
 
-export default class Discover extends Component {
-  constructor() {
-    super();
+const Discover = () => {
+  const { latestReleases, featuredPlaylists, genreCategories, loading, error } =
+    useSpotifyData();
 
-    this.state = {
-      newReleases: [],
-      playlists: [],
-      categories: []
-    };
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
-  render() {
-    const { newReleases, playlists, categories } = this.state;
+  return (
+    <div className="discover">
+      <DiscoverBlock
+        text="RELEASED THIS WEEK"
+        id="released"
+        data={latestReleases}
+      />
+      <DiscoverBlock
+        text="FEATURED PLAYLISTS"
+        id="featured"
+        data={featuredPlaylists}
+      />
+      <DiscoverBlock
+        text="BROWSE"
+        id="browse"
+        data={genreCategories}
+        imagesKey="icons"
+      />
+    </div>
+  );
+};
 
-    return (
-      <div className="discover">
-        <DiscoverBlock text="RELEASED THIS WEEK" id="released" data={newReleases} />
-        <DiscoverBlock text="FEATURED PLAYLISTS" id="featured" data={playlists} />
-        <DiscoverBlock text="BROWSE" id="browse" data={categories} imagesKey="icons" />
-      </div>
-    );
-  }
-}
+export default Discover;

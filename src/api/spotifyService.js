@@ -16,7 +16,7 @@ class SpotifyService {
       headers: this.authHeaders,
     });
 
-    return response.data;
+    return response.data.albums.items;
   };
 
   getFeaturedPlaylists = async () => {
@@ -24,7 +24,7 @@ class SpotifyService {
       headers: this.authHeaders,
     });
 
-    return response.data;
+    return response.data.playlists.items;
   };
 
   getGenreCategories = async () => {
@@ -32,7 +32,7 @@ class SpotifyService {
       headers: this.authHeaders,
     });
 
-    return response.data;
+    return response.data.categories.items;
   };
 }
 
