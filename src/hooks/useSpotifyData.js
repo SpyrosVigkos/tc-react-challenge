@@ -47,7 +47,6 @@ function useSpotifyData() {
   useEffect(() => {
     fetchData();
   }, [fetchData]); // fetchData is a dependency of this effect
-  console.log("useSpotifyData: ", spotifyData);
 
   return { spotifyData, loading, error };
 }
