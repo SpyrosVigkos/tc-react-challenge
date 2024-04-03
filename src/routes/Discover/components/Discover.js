@@ -4,8 +4,12 @@ import "../styles/_discover.scss";
 import useSpotifyData from "../../../hooks/useSpotifyData";
 
 const Discover = () => {
-  const { latestReleases, featuredPlaylists, genreCategories, loading, error } =
-    useSpotifyData();
+  const {
+    spotifyData: { latestReleases, featuredPlaylists, genreCategories },
+    loading,
+    error,
+  } = useSpotifyData();
+  console.log("Discover: ", latestReleases, featuredPlaylists, genreCategories);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;

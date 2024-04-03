@@ -1,37 +1,40 @@
 import { useState, useEffect, useCallback } from "react";
 import { SpotifyService } from "../api/spotifyService";
 
-function mapPlaylistData(playlists) {
-  return playlists.map((playlist) => ({
-    name: playlist.name,
-    images: playlist.images,
-  }));
-}
-function mapCategoryData(playlists) {
-  return playlists.map((playlist) => ({
-    name: playlist.name,
-    icons: playlist.icons,
-  }));
-}
+const dataMappers = {
+  latestReleases: (data) => data.map(({ name, images }) => ({ name, images })),
+  featuredPlaylists: (data) =>
+    data.map(({ name, images }) => ({ name, images })),
+  genreCategories: (data) => data.map(({ name, icons }) => ({ name, icons })),
+};
 
 function useSpotifyData() {
-  const [latestReleases, setLatestReleases] = useState([]);
-  const [featuredPlaylists, setFeaturedPlaylists] = useState([]);
-  const [genreCategories, setGenreCategories] = useState([]);
+  const [spotifyData, setSpotifyData] = useState({
+    latestReleases: [],
+    featuredPlaylists: [],
+    genreCategories: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Define fetchData using useCallback
+  // Fetch all data in parallel using Promise.all for efficiency
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const latest = await SpotifyService.getLatestReleases();
-      const playlists = await SpotifyService.getFeaturedPlaylists();
-      const genres = await SpotifyService.getGenreCategories();
+      const data = await Promise.all([
+        SpotifyService.getLatestReleases(),
+        SpotifyService.getFeaturedPlaylists(),
+        SpotifyService.getGenreCategories(),
+      ]);
+      console.log("data", data);
 
-      setLatestReleases(latest);
-      setFeaturedPlaylists(playlists);
-      setGenreCategories(genres);
+      // Map the data immediately after fetching
+      const [latestReleases, featuredPlaylists, genreCategories] = data;
+      setSpotifyData({
+        latestReleases: dataMappers.latestReleases(latestReleases),
+        featuredPlaylists: dataMappers.featuredPlaylists(featuredPlaylists),
+        genreCategories: dataMappers.genreCategories(genreCategories),
+      });
     } catch (err) {
       console.error("Error fetching Spotify data:", err);
       setError(err);
@@ -44,18 +47,9 @@ function useSpotifyData() {
   useEffect(() => {
     fetchData();
   }, [fetchData]); // fetchData is a dependency of this effect
+  console.log("useSpotifyData: ", spotifyData);
 
-  const mappedLatestReleases = mapPlaylistData(latestReleases);
-  const mappedfeaturedPlaylists = mapPlaylistData(featuredPlaylists);
-  const mappedCategories = mapCategoryData(genreCategories);
-
-  return {
-    latestReleases: mappedLatestReleases,
-    featuredPlaylists: mappedfeaturedPlaylists,
-    genreCategories: mappedCategories,
-    loading,
-    error,
-  };
+  return { spotifyData, loading, error };
 }
 
 export default useSpotifyData;
