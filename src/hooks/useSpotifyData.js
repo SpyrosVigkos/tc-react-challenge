@@ -26,7 +26,6 @@ function useSpotifyData() {
         SpotifyService.getFeaturedPlaylists(),
         SpotifyService.getGenreCategories(),
       ]);
-      console.log("data", data);
 
       // Map the data immediately after fetching
       const [latestReleases, featuredPlaylists, genreCategories] = data;
