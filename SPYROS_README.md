@@ -17,7 +17,7 @@ Additionally, I included an optional loading state/UI to enhance the user experi
 - **Spotify API Documentation**: Thoroughly reviewed to understand the available endpoints and data structures.
 - **Parallel Requests**: Utilized `Promise.all` to fetch data in parallel, reducing overall load time and improving UX.
 - **API Request Location**: Calls to the Spotify API are encapsulated within a custom React hook, `useSpotifyData`, which is then used by the components that require that data.
-- **State Management**: Employed custom hooks for state management, which provided a lightweight and scalable solution. This approach allowed for asynchronous data fetching, state initialization, and loading state management, while keeping the UI components clean and focused on presentation.
+- **State Management**: Employed custom hook for state management, which provided a lightweight and scalable solution. This approach allowed for asynchronous data fetching, state initialization, and loading state management, while keeping the UI components clean and focused on presentation.
 - **Separation of Logic**: Extracted much of the business logic from UI components to keep them clean and focused on presentation. This also improves testability and maintainability of the code.
 
 ## Time Considerations
